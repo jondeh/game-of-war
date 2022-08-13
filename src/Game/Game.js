@@ -2,8 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { ruleMap } from '../utils/rules'
 
-const HEIGHT = 20
-const WIDTH = 20
+const HEIGHT = 60
+const WIDTH = 60
 const SIZE = 15
 const TIME = 100
 let RULES = 'battle'
@@ -38,10 +38,7 @@ function App () {
       setInterval(() => {
         const updates = findUpdates()
         updates.forEach(update => {
-          grid[update.location] = {
-            value: update.value,
-            user: update.user
-          }
+          grid[update.location] = update
         })
 
         if (!updates.length) {
@@ -97,7 +94,6 @@ function findUpdates () {
   for (let i = 0; i < WIDTH; i++) {
     for (let j = 0; j < HEIGHT; j++) {
       const neighbors = getNeighbors(i, j)
-      //   console.log('neighbors', neighbors)
       const current = gridMap[`${i}-${j}`]
       const next = getNextState(current, neighbors, USER)
       if (next.value !== current.value) {
@@ -163,12 +159,11 @@ const Square = ({ location, value, user }) => {
   const makeAlive = location => {
     gridMap[location] = {
       value: 1,
-      user: user
+      user: +USER
     }
     setColor({ value: 1, user: USER })
   }
 
-  //   console.log(USER)
   React.useEffect(() => {
     if (ref.current < 2) return
     setColor({ value, user })
@@ -222,11 +217,11 @@ const playerColorMap = {
   defaultFill: '#fff',
   defaultBorder: '#dcdcdc',
 
-  playerOneBorder: 'darkblue',
-  playerOneFill: 'blue',
+  playerOneBorder: '#F0F8FF',
+  playerOneFill: '#00FFFF',
 
-  playerTwoBorder: 'darkred',
-  playerTwoFill: 'red'
+  playerTwoBorder: '#F8F8FF',
+  playerTwoFill: '#B22222'
 }
 
 const {

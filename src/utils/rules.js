@@ -58,17 +58,35 @@ export const ruleMap = {
 }
 
 const battle = (current, neighbors, user) => {
-  if (current.value === 0 && neighbors.length === 3) {
-    return { value: 1, user: user }
-  }
-  if (current.value === 1 && (neighbors.length < 2 || neighbors.length > 3)) {
+  const playerOne = neighbors.filter(n => n === +1).length
+  const playerTwo = neighbors.filter(n => n === +2).length
+
+  if (![2, 3].includes(playerOne) && ![2, 3].includes(playerTwo)) {
     return { value: 0, user: 0 }
   }
-  if (current.value === 2 && (neighbors.length < 2 || neighbors.length > 3)) {
-    return { value: 0, user: 0 }
+
+  if (current.value === 0) {
+    if (playerOne === 3 && playerOne > playerTwo) {
+      return { value: 1, user: 1 }
+    } else if (playerTwo === 3 && playerTwo > playerOne) {
+      return { value: 1, user: 2 }
+    } else {
+      return { value: 0, user: 0 }
+    }
   }
-  if (current.value === 3 && (neighbors.length < 2 || neighbors.length > 3)) {
-    return { value: 0, user: 0 }
+
+  if (current.value === 1) {
+    if ([2, 3].includes(playerOne) && playerOne > playerTwo) {
+      return { value: 1, user: 1 }
+    }
+    if ([2, 3].includes(playerTwo) && playerTwo > playerOne) {
+      return { value: 1, user: 2 }
+    }
+
+    if (playerOne === 3 && playerOne === playerTwo) {
+      return { value: 0, user: 0 }
+    }
   }
+
   return current
 }
